@@ -7,8 +7,8 @@ function AppContextProvider(props) {
     //whatever we want to pass goes inside the value object
     //when we want to use it on a component, import
         //import {AppContext} from "../components/AppContextProvider.jsx";
-    // const context = useContext(AppContext)
     const [colorMode, setColorMode] = useState("light-mode");
+
 
     return (
         <AppContext.Provider value={{colorMode, setColorMode }}>
