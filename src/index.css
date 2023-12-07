@@ -89,9 +89,13 @@ background-color: white;
 margin: 0.5rem 0 ;
 }
 .card-container {
-background-color: wheat;
+/* background-color: wheat; */
 margin-top: 2rem;
 height: 100%;
+display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1em;
+/* max-width: min-content; */
 }
 .nav-bg {
 background-color: lavender;
@@ -99,15 +103,18 @@ background-color: lavender;
 
 .example-holder {
 padding: 2rem;
-background-color: #88c0d0;
+/* background-color: #88c0d0; */
 height: 100%;
+display: flex;
+flex-direction: column;
 /* min-height: 100vh; */
 
 }
 .user-input {
 display: flex;
 flex-direction: row;
-
+justify-content: center;
+align-items: center;
 }
 
 
