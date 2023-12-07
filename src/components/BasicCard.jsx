@@ -43,6 +43,7 @@ export default function BasicCard(props) {
           </Typography>
         </div>
         <Button
+            onClick={props.removeStock}
           variant="soft"
           size="md"
           color="primary"
@@ -53,6 +54,7 @@ export default function BasicCard(props) {
           Remove
         </Button>
         <Button
+            onClick={props.addStock}
           variant="soft"
           size="md"
           color="primary"

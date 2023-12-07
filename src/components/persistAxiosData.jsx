@@ -10,11 +10,11 @@ function persistAxiosData(apiLink) {
         fetchRan: false,
     });
 
-    useEffect(() => {
+   /*  useEffect(() => {
         sessionStorage.setItem("PersistComp", JSON.stringify(persistComp))
         return () => {
         }
-    }, [persistComp.fetchData])
+    }, [persistComp.fetchData]) */
 
     //we would make fetchRan false, to fetch the database again, which makes no sense, because when we update our data
     //from initial fetch data, we updated the state and sessionStorage, there's no need to call the database after initial call!
