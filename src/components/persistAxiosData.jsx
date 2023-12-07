@@ -62,7 +62,7 @@ function persistAxiosData(apiLink) {
             console.log("clean up function")
             abortController.abort()
         }
-    }, [persistComp.fetchRan])
+    }, [])
 
     axios.interceptors.response.use(
         (response) => response,

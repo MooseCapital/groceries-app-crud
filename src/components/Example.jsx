@@ -29,42 +29,42 @@ function Example(props) {
             })
         }))
     } */
-/*
+    /*
 
-    async function addStock(cardId) {
-        const updatedItems = await Promise.all(
-            persistComp.fetchData.map(async (item) => {
-                if (item?.id === cardId) {
-                    let res = await axios.put(`${import.meta.env.VITE_API_LINK}/groceries/addstock/${item?.id}`);
-                    console.log(res.data[0]);
-                    return res?.data[0];
-                }
-                return {...item}
-            })
-        );
-        setPersistComp(prevState => ({
-            ...prevState,
-            fetchData: updatedItems
-        }));
-    }
+        async function addStock(cardId) {
+            const updatedItems = await Promise.all(
+                persistComp.fetchData.map(async (item) => {
+                    if (item?.id === cardId) {
+                        let res = await axios.put(`${import.meta.env.VITE_API_LINK}/groceries/addstock/${item?.id}`);
+                        console.log(res.data[0]);
+                        return res?.data[0];
+                    }
+                    return {...item}
+                })
+            );
+            setPersistComp(prevState => ({
+                ...prevState,
+                fetchData: updatedItems
+            }));
+        }
 
-    async function removeStock(cardId) {
-        const updatedItems = await Promise.all(
-            persistComp.fetchData.map(async (item) => {
-                if (item?.id === cardId) {
-                    let res = await axios.put(`${import.meta.env.VITE_API_LINK}/groceries/removestock/${item?.id}`);
-                    console.log(res.data[0]);
-                    return res?.data[0];
-                }
-                return {...item}
-            })
-        );
-        setPersistComp(prevState => ({
-            ...prevState,
-            fetchData: updatedItems
-        }));
-    }
-*/
+        async function removeStock(cardId) {
+            const updatedItems = await Promise.all(
+                persistComp.fetchData.map(async (item) => {
+                    if (item?.id === cardId) {
+                        let res = await axios.put(`${import.meta.env.VITE_API_LINK}/groceries/removestock/${item?.id}`);
+                        console.log(res.data[0]);
+                        return res?.data[0];
+                    }
+                    return {...item}
+                })
+            );
+            setPersistComp(prevState => ({
+                ...prevState,
+                fetchData: updatedItems
+            }));
+        }
+    */
     /* const [inputValue, setInputValue] = useState('')
     async function handleChange(e) {
         setInputValue(prevState => e.target.value )
@@ -75,39 +75,54 @@ function Example(props) {
         console.log(res.data)
     } */
 
-  const [inputValue, setInputValue] = useState('');
-  const [timer, setTimer] = useState(null);
+    const [inputValue, setInputValue] = useState('');
+    const [timer, setTimer] = useState(null);
 
-  const handleChange = async (event) => {
-    clearTimeout(timer); // clear the timer if it's running
-    setInputValue(prevState => event.target.value);
-
-  };
-
-  useEffect(() => {
-    if (inputValue === '') {
+    const handleChange = async (event) => {
+        clearTimeout(timer); // clear the timer if it's running
         setPersistComp(prevState => {
-            return {...prevState,fetchRan:false}
+            return {...prevState, loading:true}
         })
-        return
-    } //set card state to default
-    const delayDebounceFn = setTimeout(async () => {
-        console.log(inputValue);
-        let res = await axios.get(`${import.meta.env.VITE_API_LINK}/groceries/search?item=${inputValue}`);
-        setPersistComp(prevState => {
-            return {
-                ...prevState,
-            fetchData: res.data
+        setInputValue(prevState => event.target.value);
+
+    };
+
+    useEffect(() => {
+        if (inputValue === '') {
+            console.log('empty input')
+            async function getAllGroceries() {
+                let res = await axios.get(`${import.meta.env.VITE_API_LINK}/groceries/getall`)
+                setPersistComp(prevState => {
+                    return {
+                        ...prevState,
+                        loading: false,
+                        fetchData: res.data
+                    }
+                })
+
             }
-        })
-        console.log(res.data)
-    }, 3000) // Will execute after a 2 seconds delay if no new input occurs
 
-    setTimer(delayDebounceFn);
+            getAllGroceries()
+            return
+        } //set card state to default
+        const delayDebounceFn = setTimeout(async () => {
+            console.log(inputValue);
+            let res = await axios.get(`${import.meta.env.VITE_API_LINK}/groceries/search?item=${inputValue}`);
+            setPersistComp(prevState => {
+                return {
+                    ...prevState,
+                    loading: false,
+                    fetchData: res.data
+                }
+            })
+            console.log(res.data)
+        }, 3000) // Will execute after a 2 seconds delay if no new input occurs
 
-    // Cleanup function: if the user types something new, we clear the timer
-    return () => clearTimeout(timer);
-  }, [inputValue])
+        setTimer(delayDebounceFn);
+
+        // Cleanup function: if the user types something new, we clear the timer
+        return () => clearTimeout(timer);
+    }, [inputValue])
 
     function GroceryCards() {
         return (
@@ -116,7 +131,7 @@ function Example(props) {
                     return <BasicCard id={item?.id} name={item?.name} price={item?.price}
                                       stock={item?.stock} category_id={item?.category_id}
                                       image_url={item?.image_url} date_time={item?.date_time} key={index}
-                                       loading={persistComp.loading}
+                                      loading={persistComp.loading}
                     />
                 })}
             </>
@@ -132,9 +147,10 @@ function Example(props) {
                     </Typography>
                     <Input placeholder={'search..'} color={"neutral"} size="sm" variant={"soft"} width={'100'}
                            style={{maxWidth: '10rem', margin: '0 1rem'}}
-                     onChange={handleChange} value={inputValue}
-                           />
-                    <Button onClick={() => console.log(1)} variant="outlined" color={"neutral"} style={{marginRight: '1rem'}}>Search</Button>
+                           onChange={handleChange} value={inputValue}
+                    />
+                    <Button onClick={() => console.log(typeof inputValue)} variant="outlined" color={"neutral"}
+                            style={{marginRight: '1rem'}}>Search</Button>
                 </div>
                 <div className="card-container">
                     <GroceryCards/>

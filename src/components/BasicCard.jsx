@@ -9,6 +9,7 @@ import CardOverflow from '@mui/joy/CardOverflow';
 import Divider from '@mui/joy/Divider';
 import {useState} from "react";
 import axios from "axios";
+import {Skeleton} from "@mui/joy";
 
 // import BookmarkAdd from '@mui/icons-material/BookmarkAddOutlined';
 
@@ -36,29 +37,43 @@ export default function BasicCard(props) {
 
     return (
         <Card sx={{maxWidth: 350}}>
-
             <CardContent orientation="horizontal">
-                <Typography level="title-lg">{props?.name}</Typography>
+
+                <Typography level="title-lg">
+                <Skeleton loading={props?.loading} >
+                {props?.name}
+                </Skeleton>
+                </Typography>
                 <Typography level="body-xs" fontWeight="md" textColor="text.secondary"
                             style={{alignSelf: 'center', marginLeft: 'auto'}}>
-                    {localStock} in stock
+                    <Skeleton loading={props?.loading}>
+                        {localStock} in stock
+                    </Skeleton>
                 </Typography>
                 {/* <Divider orientation="vertical" /> */}
             </CardContent>
 
             <AspectRatio minHeight="120px" maxHeight="200px" variant={'plain'} objectFit={'contain'}>
-                <img
-                    // src="https://images.unsplash.com/photo-1527549993586-dff825b37782?auto=format&fit=crop&w=286"
-                    src={`${props?.image_url}`}
-                    loading="lazy"
-                    alt=""
-                />
+                <Skeleton loading={props?.loading}>
+                    <img
+                        // src="https://images.unsplash.com/photo-1527549993586-dff825b37782?auto=format&fit=crop&w=286"
+                        src={`${props?.image_url}`}
+                        loading={`${props?.loading}`}
+                        alt=""
+                    />
+                </Skeleton>
             </AspectRatio>
             <CardContent orientation="horizontal">
                 <div>
-                    <Typography level="body-xs">price:</Typography>
+                    <Typography level="body-xs">
+                    <Skeleton loading={props?.loading}>
+                    price:
+                    </Skeleton>
+                    </Typography>
                     <Typography fontSize="lg" fontWeight="lg">
-                        ${props?.price}
+                        <Skeleton loading={props?.loading}>
+                            ${props?.price}
+                        </Skeleton>
                     </Typography>
                 </div>
                 <Button
@@ -70,7 +85,9 @@ export default function BasicCard(props) {
                     sx={{ml: 'auto', alignSelf: 'center', fontWeight: 600}}
                     loading={removeBtnLoad}
                 >
-                    Remove
+                    <Skeleton loading={props?.loading}>
+                        Remove
+                    </Skeleton>
                 </Button>
                 <Button
                     onClick={addStock}
@@ -81,10 +98,11 @@ export default function BasicCard(props) {
                     sx={{ml: 'auto', alignSelf: 'center', fontWeight: 600}}
                     loading={addBtnLoad}
                 >
-                    Add
+                    <Skeleton loading={props?.loading}>
+                        Add
+                    </Skeleton>
                 </Button>
             </CardContent>
-
         </Card>
     );
 }
