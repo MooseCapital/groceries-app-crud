@@ -1,3 +1,5 @@
+
+![groceries-app-gif](https://a.l3n.co/i/sPAYnM.gif?open=true)
 ## Groceries App
 This React vite website uses express api in the backend that connects to my postgres database to
 call the data each time. It has react toast alerts when the rate limit is exceeded and an artificial wait

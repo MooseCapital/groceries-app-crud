@@ -39,14 +39,6 @@ export default App
 /*
 
 
-## gh-pages when finished
-
-1)  Go into package.json -> in the scripts section add the code
-
-```
-"deploy": "gh-pages -d dist"
-```
-
 
 2) go to vite.config.js -> after plugins, write base with the current directory on Github
 
