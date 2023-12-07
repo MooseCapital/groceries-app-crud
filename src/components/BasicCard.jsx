@@ -8,64 +8,83 @@ import Typography from '@mui/joy/Typography';
 import CardOverflow from '@mui/joy/CardOverflow';
 import Divider from '@mui/joy/Divider';
 import {useState} from "react";
+import axios from "axios";
 
 // import BookmarkAdd from '@mui/icons-material/BookmarkAddOutlined';
 
 export default function BasicCard(props) {
 
-    const [addBtnLoad, setAddBtnLoad] = useState(false);
+    const [addBtnLoad, setAddBtnLoad] = useState(false)
     const [removeBtnLoad, setRemoveBtnLoad] = useState(false)
+    const [localStock, setLocalStock] = useState(props?.stock)
 
-  return (
-    <Card sx={{ maxWidth: 350 }}>
+    async function addStock(cardId) {
+        setAddBtnLoad((prevState) => true)
+        let res = await axios.put(`${import.meta.env.VITE_API_LINK}/groceries/addstock/${props?.id}`);
+        console.log(res.data[0])
+        setLocalStock((prevState) => prevState + 1)
+        setAddBtnLoad((prevState) => false)
+    }
 
-        <CardContent orientation="horizontal">
-        <Typography level="title-lg"  >{props?.name}</Typography>
-          <Typography level="body-xs" fontWeight="md" textColor="text.secondary" style={{alignSelf:'center', marginLeft:'auto'}}>
-              {props?.stock} in stock
-          </Typography >
-          {/* <Divider orientation="vertical" /> */}
-        </CardContent>
+    async function removeStock(cardId) {
+        setRemoveBtnLoad(prevState => true)
+        let res = await axios.put(`${import.meta.env.VITE_API_LINK}/groceries/removestock/${props?.id}`);
+        console.log(res.data[0])
+        setLocalStock((prevState) => prevState - 1)
+        setRemoveBtnLoad(prevState => false)
+    }
 
-      <AspectRatio minHeight="120px" maxHeight="200px" variant={'plain'}  objectFit={'contain'}>
-        <img
-          // src="https://images.unsplash.com/photo-1527549993586-dff825b37782?auto=format&fit=crop&w=286"
-          src={`${props?.image_url}`}
-          loading="lazy"
-          alt=""
-        />
-      </AspectRatio>
-      <CardContent orientation="horizontal">
-        <div>
-          <Typography level="body-xs">price:</Typography>
-          <Typography fontSize="lg" fontWeight="lg">
-            ${props?.price}
-          </Typography>
-        </div>
-        <Button
-            onClick={props.removeStock}
-          variant="soft"
-          size="md"
-          color="primary"
-          aria-label="Explore Bahamas Islands"
-          sx={{ ml: 'auto', alignSelf: 'center', fontWeight: 600 }}
-          loading={removeBtnLoad}
-        >
-          Remove
-        </Button>
-        <Button
-            onClick={props.addStock}
-          variant="soft"
-          size="md"
-          color="primary"
-          aria-label="Explore Bahamas Islands"
-          sx={{ ml: 'auto', alignSelf: 'center', fontWeight: 600 }}
-            loading={addBtnLoad}
-        >
-          Add
-        </Button>
-      </CardContent>
+    return (
+        <Card sx={{maxWidth: 350}}>
 
-    </Card>
-  );
+            <CardContent orientation="horizontal">
+                <Typography level="title-lg">{props?.name}</Typography>
+                <Typography level="body-xs" fontWeight="md" textColor="text.secondary"
+                            style={{alignSelf: 'center', marginLeft: 'auto'}}>
+                    {localStock} in stock
+                </Typography>
+                {/* <Divider orientation="vertical" /> */}
+            </CardContent>
+
+            <AspectRatio minHeight="120px" maxHeight="200px" variant={'plain'} objectFit={'contain'}>
+                <img
+                    // src="https://images.unsplash.com/photo-1527549993586-dff825b37782?auto=format&fit=crop&w=286"
+                    src={`${props?.image_url}`}
+                    loading="lazy"
+                    alt=""
+                />
+            </AspectRatio>
+            <CardContent orientation="horizontal">
+                <div>
+                    <Typography level="body-xs">price:</Typography>
+                    <Typography fontSize="lg" fontWeight="lg">
+                        ${props?.price}
+                    </Typography>
+                </div>
+                <Button
+                    onClick={removeStock}
+                    variant="soft"
+                    size="md"
+                    color="primary"
+                    aria-label="Explore Bahamas Islands"
+                    sx={{ml: 'auto', alignSelf: 'center', fontWeight: 600}}
+                    loading={removeBtnLoad}
+                >
+                    Remove
+                </Button>
+                <Button
+                    onClick={addStock}
+                    variant="soft"
+                    size="md"
+                    color="primary"
+                    aria-label="Explore Bahamas Islands"
+                    sx={{ml: 'auto', alignSelf: 'center', fontWeight: 600}}
+                    loading={addBtnLoad}
+                >
+                    Add
+                </Button>
+            </CardContent>
+
+        </Card>
+    );
 }
