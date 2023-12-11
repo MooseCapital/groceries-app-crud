@@ -15,61 +15,10 @@ import {LazyLoadImage} from 'react-lazy-load-image-component';
 // import 'react-lazy-load-image-component/src/effects/blur.css';
 // import BookmarkAdd from '@mui/icons-material/BookmarkAddOutlined';
 
-export default function BasicCard(props) {
+export const BasicCard = React.memo( function BasicCard(props) {
 
-    const [localStock, setLocalStock] = useState(props?.stock)
+    // const [localStock, setLocalStock] = useState(props?.stock)
 
-    async function addStock(cardId) {
-
-        try {
-            let res = await axios.put(`${import.meta.env.VITE_API_LINK}/groceries/addstock/${props?.id}`);
-            console.log(res.data[0])
-            setLocalStock((prevState) => prevState + 1)
-
-        }
-        catch (e) {
-            console.log(e);  // Cold catch, prints whatever error is
-
-            if (e?.response?.status === 429) { // 429 status code received
-                console.log('429 error test')
-                toast.error('You are doing that too much, wait a minute and try again', {
-                    position: "top-right",
-                    autoClose: 7000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "light",
-                });
-            }
-        }
-    }
-
-    async function removeStock(cardId) {
-        try {
-            let res = await axios.put(`${import.meta.env.VITE_API_LINK}/groceries/removestock/${props?.id}`);
-            console.log(res.data[0])
-            setLocalStock((prevState) => prevState - 1)
-        }
-        catch (e) {
-            console.log(e);  // Cold catch, prints whatever error is
-
-            if (e?.response?.status === 429) { // 429 status code received
-                console.log('429 error test')
-                toast.error('You are doing that too much, wait a minute and try again', {
-                    position: "top-right",
-                    autoClose: 7000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "light",
-                });
-            }
-        }
-    }
 
     return (
         <Card sx={{maxWidth: 350}}>
@@ -83,25 +32,18 @@ export default function BasicCard(props) {
                 <Typography level="body-xs" fontWeight="md" textColor="text.secondary"
                             style={{alignSelf: 'center', marginLeft: 'auto'}}>
                     <Skeleton loading={props?.loading}>
-                        {localStock} in stock
+                        {props?.stock} in stock
                     </Skeleton>
                 </Typography>
                 {/* <Divider orientation="vertical" /> */}
             </CardContent>
 
             <AspectRatio minHeight="120px" maxHeight="200px" variant={'plain'} objectFit={'contain'}>
-                {/* <Skeleton loading={props?.loading}>
-                    { !props?.loading && <img
-                        // src="https://images.unsplash.com/photo-1527549993586-dff825b37782?auto=format&fit=crop&w=286"
-                        src={`${props?.image_url}`}
-                        loading={`${props?.loading}`}
-                        alt=""
-                    />}
-                </Skeleton> */}
+
                 {props?.loading
                     ? <Skeleton variant="rectangular" width="100%" height="100%"/>
                     // : <img src={props?.image_url} alt="" loading="lazy"/>
-                    : <LazyLoadImage src={props?.image_url} alt="" effect={"blur"} />
+                    : <LazyLoadImage src={props?.image_url} alt=""  />
                 }
             </AspectRatio>
             <CardContent orientation="horizontal">
@@ -118,7 +60,7 @@ export default function BasicCard(props) {
                     </Typography>
                 </div>
                 <Button
-                    onClick={removeStock}
+                    onClick={props?.removeStock}
                     variant="soft"
                     size="md"
                     color="primary"
@@ -131,7 +73,7 @@ export default function BasicCard(props) {
                     </Skeleton>
                 </Button>
                 <Button
-                    onClick={addStock}
+                    onClick={props?.addStock}
                     variant="soft"
                     size="md"
                     color="primary"
@@ -146,4 +88,4 @@ export default function BasicCard(props) {
             </CardContent>
         </Card>
     );
-}
+})

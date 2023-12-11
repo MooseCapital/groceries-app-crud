@@ -2,7 +2,7 @@ import {useContext, useEffect, useState, useRef} from 'react'
 import React from 'react'
 import Input from '@mui/joy/Input';
 import Button from '@mui/joy/Button';
-import BasicCard from "./BasicCard.jsx";
+import {BasicCard} from "./BasicCard.jsx";
 import Typography from "@mui/joy/Typography";
 import {persistAxiosData} from "./persistAxiosData.jsx";
 import axios from "axios";
@@ -17,7 +17,76 @@ function Example(props) {
         fetchRan: false,
     });
 
+    async function addStock(cardId) {
 
+        try {
+            let res = await axios.put(`${import.meta.env.VITE_API_LINK}/groceries/addstock/${cardId}`);
+            console.log(res.data[0])
+
+            setPersistComp(prevState => {
+                    let newFetchData = prevState.fetchData?.map((item, index) => {
+                        return item?.id === cardId ? res.data[0] : item
+                    })
+                    return {
+                        ...prevState,
+                        fetchData: newFetchData
+                    }
+                }
+
+            )
+        } catch (e) {
+            console.log(e);  // Cold catch, prints whatever error is
+
+            if (e?.response?.status === 429) { // 429 status code received
+                console.log('429 error test')
+                toast.error('You are doing that too much, wait a minute and try again', {
+                    position: "top-right",
+                    autoClose: 7000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                });
+            }
+        }
+    }
+
+    async function removeStock(cardId) {
+
+        try {
+            let res = await axios.put(`${import.meta.env.VITE_API_LINK}/groceries/removestock/${cardId}`);
+            console.log(res.data[0])
+
+            setPersistComp(prevState => {
+                    let newFetchData = prevState.fetchData?.map((item, index) => {
+                        return item?.id === cardId ? res.data[0] : item
+                    })
+                    return {
+                        ...prevState,
+                        fetchData: newFetchData
+                    }
+                }
+            )
+        } catch (e) {
+            console.log(e);  // Cold catch, prints whatever error is
+
+            if (e?.response?.status === 429) { // 429 status code received
+                console.log('429 error test')
+                toast.error('You are doing that too much, wait a minute and try again', {
+                    position: "top-right",
+                    autoClose: 7000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                });
+            }
+        }
+    }
 
 
     const [inputValue, setInputValue] = useState('');
@@ -100,8 +169,8 @@ function Example(props) {
                 {persistComp?.fetchData?.map((item, index) => {
                     return <BasicCard id={item?.id} name={item?.name} price={item?.price}
                                       stock={item?.stock} category_id={item?.category_id}
-                                      image_url={item?.image_url} date_time={item?.date_time} key={index}
-                                      loading={persistComp.loading}
+                                      image_url={item?.image_url} date_time={item?.date_time} key={item?.id}
+                                      loading={persistComp.loading} addStock={() => addStock(item?.id)} removeStock={() => removeStock(item?.id)}
                     />
                 })}
                 <ToastContainer/>
