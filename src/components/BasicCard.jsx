@@ -11,7 +11,8 @@ import {useState} from "react";
 import axios from "axios";
 import {Skeleton} from "@mui/joy";
 import {toast} from "react-toastify";
-
+import {LazyLoadImage} from 'react-lazy-load-image-component';
+// import 'react-lazy-load-image-component/src/effects/blur.css';
 // import BookmarkAdd from '@mui/icons-material/BookmarkAddOutlined';
 
 export default function BasicCard(props) {
@@ -99,7 +100,8 @@ export default function BasicCard(props) {
                 </Skeleton> */}
                 {props?.loading
                     ? <Skeleton variant="rectangular" width="100%" height="100%"/>
-                    : <img src={props?.image_url} alt="" loading="lazy"/>
+                    // : <img src={props?.image_url} alt="" loading="lazy"/>
+                    : <LazyLoadImage src={props?.image_url} alt="" effect={"blur"} />
                 }
             </AspectRatio>
             <CardContent orientation="horizontal">

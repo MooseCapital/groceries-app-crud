@@ -7,7 +7,7 @@ import Button from "@mui/joy/Button";
 function Home(props) {
 
     // const {persistComp, setPersistComp, updateData} = persistAxiosData('/groceries/getall')
-
+    console.log('home')
     const context = useContext(AppContext)
     return (
         <>

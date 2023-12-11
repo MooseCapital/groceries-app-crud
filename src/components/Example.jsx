@@ -34,7 +34,7 @@ function Example(props) {
 
     useEffect(() => {
         if (inputValue === '') {
-            console.log('empty search input')
+            console.log('empty input string')
 
             async function getAllGroceries() {
                 let res = await axios.get(`${import.meta.env.VITE_API_LINK}/groceries/getall`)
