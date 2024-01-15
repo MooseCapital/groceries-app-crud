@@ -37,7 +37,7 @@ function Example(props) {
             console.log('empty input string')
 
             async function getAllGroceries() {
-                let res = await axios.get(`${import.meta.env.VITE_API_LINK}/groceries/getall`)
+                let res = await axios.get(`${import.meta.env.VITE_API_LINK}/api/groceries/`)
                 console.log(res)
                 setPersistComp(prevState => {
                     return {
@@ -55,7 +55,7 @@ function Example(props) {
         const delayDebounceFn = setTimeout(async () => {
             try {
                 console.log(inputValue);
-                let res = await axios.get(`${import.meta.env.VITE_API_LINK}/groceries/search?item=${inputValue}`);
+                let res = await axios.get(`${import.meta.env.VITE_API_LINK}/api/groceries/?filter[name]=${inputValue}`);
                 console.log(res)
 
                 setPersistComp(prevState => {
