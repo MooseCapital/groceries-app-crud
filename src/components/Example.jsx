@@ -11,13 +11,17 @@ import 'react-toastify/dist/ReactToastify.css';
 
 function Example(props) {
 
-    const [persistComp, setPersistComp] = useState({
+    const [persistComp, setPersistComp] = useState(JSON.parse(sessionStorage.getItem("PersistComp")) || {
         fetchData: null,
         loading: true,
         fetchRan: false,
     });
 
-
+    useEffect(() => {
+        sessionStorage.setItem("PersistComp", JSON.stringify(persistComp))
+        return () => {
+        }
+    }, [persistComp.fetchData])
 
 
     const [inputValue, setInputValue] = useState('');
@@ -33,62 +37,63 @@ function Example(props) {
     };
 
     useEffect(() => {
-        if (inputValue === '') {
-            console.log('empty input string')
 
-            async function getAllGroceries() {
-                let res = await axios.get(`${import.meta.env.VITE_API_LINK}/api/groceries/`)
-                console.log(res)
-                setPersistComp(prevState => {
-                    return {
-                        ...prevState,
-                        loading: false,
-                        fetchData: res.data
-                    }
-                })
-
-            }
-
-            getAllGroceries()
-            return
-        } //set card state to default
-        const delayDebounceFn = setTimeout(async () => {
-            try {
-                console.log(inputValue);
-                let res = await axios.get(`${import.meta.env.VITE_API_LINK}/api/groceries/?filter[name]=${inputValue}`);
-                console.log(res)
-
-                setPersistComp(prevState => {
-
-                    return {
-                        ...prevState,
-                        loading: false,
-                        fetchData: res.data
-                    }
-
-                })
-            }
-            catch (e) {
-                console.log(e);  // Cold catch, prints whatever error is
-
-                if (e?.response?.status === 429) { // 429 status code received
-                    console.log('429 error test')
-
-                    toast.error('You are doing that too much, wait a minute and try again', {
-                        position: "top-right",
-                        autoClose: 7000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                        theme: "light",
-                    });
+        async function getAllGroceries() {
+            let res = await axios.get(`${import.meta.env.VITE_API_LINK}/api/groceries/`)
+            console.log(res)
+            setPersistComp(prevState => {
+                return {
+                    ...prevState,
+                    loading: false,
+                    fetchRan: true,
+                    fetchData: res.data
                 }
-            }
-        }, 2000) // Will execute after a 2 seconds delay if no new input occurs
+            })
+            return;
+        }
 
+        if (inputValue === '') {
+            getAllGroceries()
+        } //set card state to default
+        if (inputValue !== '' && persistComp.fetchRan) {
+            const delayDebounceFn = setTimeout(async () => {
+                try {
+                    console.log(inputValue);
+                    let res = await axios.get(`${import.meta.env.VITE_API_LINK}/api/groceries/?filter[name]=${inputValue}`);
+                    console.log(res)
+
+                    setPersistComp(prevState => {
+
+                        return {
+                            ...prevState,
+                            loading: false,
+                            fetchData: res.data
+                        }
+
+                    })
+                }
+                catch (e) {
+                    console.log(e);  // Cold catch, prints whatever error is
+
+                    if (e?.response?.status === 429) { // 429 status code received
+                        console.log('429 error test')
+
+                        toast.error('You are doing that too much, wait a minute and try again', {
+                            position: "top-right",
+                            autoClose: 7000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                            theme: "light",
+                        });
+                    }
+                }
+            }, 500) // Will execute after a 2 seconds delay if no new input occurs
         setTimer(delayDebounceFn);
+        }
+
 
         // Cleanup function: if the user types something new, we clear the timer
         return () => clearTimeout(timer);

@@ -12,6 +12,8 @@ import axios from "axios";
 import {Skeleton} from "@mui/joy";
 import {toast} from "react-toastify";
 import {LazyLoadImage} from 'react-lazy-load-image-component';
+import CircularProgress from '@mui/joy/CircularProgress';
+
 // import 'react-lazy-load-image-component/src/effects/blur.css';
 // import BookmarkAdd from '@mui/icons-material/BookmarkAddOutlined';
 
@@ -90,18 +92,11 @@ export default function BasicCard(props) {
             </CardContent>
 
             <AspectRatio minHeight="120px" maxHeight="200px" variant={'plain'} objectFit={'contain'}>
-                {/* <Skeleton loading={props?.loading}>
-                    { !props?.loading && <img
-                        // src="https://images.unsplash.com/photo-1527549993586-dff825b37782?auto=format&fit=crop&w=286"
-                        src={`${props?.image_url}`}
-                        loading={`${props?.loading}`}
-                        alt=""
-                    />}
-                </Skeleton> */}
+
                 {props?.loading
                     ? <Skeleton variant="rectangular" width="100%" height="100%"/>
-                    // : <img src={props?.image_url} alt="" loading="lazy"/>
-                    : <LazyLoadImage src={props?.image_url} alt="" effect={"blur"} />
+                    : <LazyLoadImage src={props?.image_url} alt="grocery"  effect={"blur"} />
+
                 }
             </AspectRatio>
             <CardContent orientation="horizontal">
