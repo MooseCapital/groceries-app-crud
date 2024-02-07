@@ -24,7 +24,11 @@ export default function BasicCard(props) {
     async function addStock(cardId) {
 
         try {
-            let res = await axios.put(`${import.meta.env.VITE_API_LINK}/api/groceries/${props?.id}/add`);
+            let res = await axios.put(`${import.meta.env.VITE_API_LINK}/api/v1/groceries/${props?.id}/add`,
+                {headers: {
+                        'x-api-key': import.meta.env.VITE_API_KEY
+                    }
+                });
             console.log(res.data[0])
             setLocalStock((prevState) => prevState + 1)
 
@@ -50,7 +54,11 @@ export default function BasicCard(props) {
 
     async function removeStock(cardId) {
         try {
-            let res = await axios.put(`${import.meta.env.VITE_API_LINK}/api/groceries/${props?.id}/remove`);
+            let res = await axios.put(`${import.meta.env.VITE_API_LINK}/api/v1/groceries/${props?.id}/remove`,
+                {headers: {
+                        'x-api-key': import.meta.env.VITE_API_KEY
+                    }
+                });
             console.log(res.data[0])
             setLocalStock((prevState) => prevState - 1)
         }

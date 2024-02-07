@@ -39,7 +39,12 @@ function Example(props) {
     useEffect(() => {
 
         async function getAllGroceries() {
-            let res = await axios.get(`${import.meta.env.VITE_API_LINK}/api/groceries/`)
+            let res = await axios.get(`${import.meta.env.VITE_API_LINK}/api/v1/groceries`,
+                {
+                    headers: {
+                        'x-api-key': import.meta.env.VITE_API_KEY
+                    }
+                });
             console.log(res)
             setPersistComp(prevState => {
                 return {
@@ -59,7 +64,12 @@ function Example(props) {
             const delayDebounceFn = setTimeout(async () => {
                 try {
                     console.log(inputValue);
-                    let res = await axios.get(`${import.meta.env.VITE_API_LINK}/api/groceries/?filter[name]=${inputValue}`);
+                    let res = await axios.get(`${import.meta.env.VITE_API_LINK}/api/v1/groceries/?name=${inputValue}`,
+                        {
+                            headers: {
+                                'x-api-key': import.meta.env.VITE_API_KEY
+                            }
+                        });
                     console.log(res)
 
                     setPersistComp(prevState => {
@@ -71,8 +81,7 @@ function Example(props) {
                         }
 
                     })
-                }
-                catch (e) {
+                } catch (e) {
                     console.log(e);  // Cold catch, prints whatever error is
 
                     if (e?.response?.status === 429) { // 429 status code received
@@ -91,7 +100,7 @@ function Example(props) {
                     }
                 }
             }, 500) // Will execute after a 2 seconds delay if no new input occurs
-        setTimer(delayDebounceFn);
+            setTimer(delayDebounceFn);
         }
 
 
