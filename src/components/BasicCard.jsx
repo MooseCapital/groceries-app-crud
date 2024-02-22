@@ -24,8 +24,9 @@ export default function BasicCard(props) {
     async function addStock(cardId) {
 
         try {
-            let res = await axios.put(`${import.meta.env.VITE_API_LINK}/api/v1/groceries/${props?.id}/add`,
-                {headers: {
+            let res = await axios.put(`${import.meta.env.VITE_API_LINK}/api/v1/groceries/${props?.id}/add`,{},
+                {
+                headers: {
                         'x-api-key': import.meta.env.VITE_API_KEY
                     }
                 });
@@ -54,8 +55,9 @@ export default function BasicCard(props) {
 
     async function removeStock(cardId) {
         try {
-            let res = await axios.put(`${import.meta.env.VITE_API_LINK}/api/v1/groceries/${props?.id}/remove`,
-                {headers: {
+            let res = await axios.put(`${import.meta.env.VITE_API_LINK}/api/v1/groceries/${props?.id}/remove`,{},
+                {
+                headers: {
                         'x-api-key': import.meta.env.VITE_API_KEY
                     }
                 });
